@@ -1,0 +1,22 @@
+source 'https://rubygems.org'
+
+gem 'rackster', "~> <%= Rackster::VERSION %>"
+gem 'pry'
+
+group :development do
+  gem 'shotgun'
+end
+
+group :test, :development do
+  gem 'byebug'
+  gem 'sqlite3'
+end
+
+group :test do
+  gem 'rspec', '~> 3.0'
+  gem 'rubocop'
+  gem 'rubocop-rspec'
+  gem 'faker'
+  gem 'factory_girl'
+  gem 'database_cleaner'
+end

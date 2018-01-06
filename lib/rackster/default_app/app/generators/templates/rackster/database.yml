@@ -1,0 +1,3 @@
+development:
+  adapter: 'sqlite'
+  database: 'db/development.db'

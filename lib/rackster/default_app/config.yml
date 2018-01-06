@@ -1,0 +1,4 @@
+development:
+  hot_reload: true
+  logger:
+    level: 'debug'

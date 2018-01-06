@@ -1,0 +1,8 @@
+logger:
+  path: <%= Rackster.tempdir_path %>/log/<%= Rackster.env %>.log
+  level: info
+hot_reload: false
+autoloaded_wildcards:
+  - 'app/models/**/*.rb'
+  - 'app/api/**/*.rb'
+  - 'app/services/**/*.rb'

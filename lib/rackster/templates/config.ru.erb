@@ -1,0 +1,6 @@
+require 'bundler'
+require 'rackster'
+Rackster.env = '<%= Rackster.env %>'
+Bundler.require(:default, '<%= Rackster.env %>')
+Rackster::Boot.boot
+run Rackster::App
