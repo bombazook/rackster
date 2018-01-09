@@ -7,14 +7,14 @@ module Rackster
         end
       end
 
-      def self.included base
+      def self.included(base)
         base.extend ClassMethods
         base.set_subset
       end
 
       module ClassMethods
-        def set_subset key=nil
-          key ||= self.name.to_s.underscore
+        def set_subset(key = nil)
+          key ||= name.to_s.underscore
           key = key.split('/') if key.is_a? String
           Rackster::Utils::Configurable.subsets[self] = key
         end
@@ -28,8 +28,6 @@ module Rackster
                 value = value[key]
               end
               value
-            else
-              nil
             end
           end
         end

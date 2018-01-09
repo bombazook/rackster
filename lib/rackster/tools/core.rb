@@ -21,7 +21,7 @@ module Rackster
         end
       end
 
-      def env= env
+      def env=(env)
         unless env_names.include?(env)
           raise UnexpectedConfig, 'environment not one of #{env_names}'
         end
@@ -40,7 +40,7 @@ module Rackster
         end
       end
 
-      def env_key key
+      def env_key(key)
         RbNaCl::Util.hex2bin(ENV[key])
       end
 
@@ -63,22 +63,22 @@ module Rackster
             FileUtils.touch logger_path
             Logger.new(logger_path, level: global_config.logger.level)
           else
-            puts "Logger unavavailable"
+            puts 'Logger unavavailable'
             nil
           end
         end
       end
 
-      alias_method :environment, :env
-      alias_method :environment=, :env=
-      alias_method :config, :global_config
-      alias_method :configuration, :global_config
+      alias environment env
+      alias environment= env=
+      alias config global_config
+      alias configuration global_config
 
       private
 
       def full_configuration
         unless root
-          raise Errors::NoAppError.new("Please run app generator before use")
+          raise Errors::NoAppError, 'Please run app generator before use'
         end
         @full_configuration ||= load_full_config
       end
@@ -86,7 +86,7 @@ module Rackster
       def load_full_config
         db_config = load_config('database.yml')
         main_config = load_config
-        db_config.each do |key, value|
+        db_config.each_key do |key|
           main_config[key] ||= {}
           main_config[key]['db'] = db_config[key]
         end

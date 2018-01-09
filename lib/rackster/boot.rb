@@ -8,9 +8,10 @@ module Rackster
           end
           Rackster::Db.connection
         end
-        load_manual_config
+        load_environment_config
         require 'rack/app'
         require_sources
+        load_initializers
         require 'rackster/app'
       end
 
@@ -25,16 +26,22 @@ module Rackster
         eager_require paths
       end
 
-      def load_manual_config
+      def load_environment_config
         Rackster.find_paths("config/environment/#{Rackster.env}.rb").each do |config_path|
           require config_path
         end
       end
 
-      def eager_require paths
+      def load_initializers
+        Rackster.find_paths('config/initializers/*.rb').each do |initializer_path|
+          require initializer_path
+        end
+      end
+
+      def eager_require(paths)
         max_retries = paths.length
         retries = {}
-        while !paths.empty?
+        until paths.empty?
           path = paths.shift
           begin
             require path

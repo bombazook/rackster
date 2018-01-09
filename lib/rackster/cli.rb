@@ -5,17 +5,16 @@ require 'rackster'
 
 module Rackster
   class Cli < Thor #:nodoc:
-
     shared_options = [
       :environment, {
-        :type => :string,
-        :aliases => ["-e"],
-        :desc => "Rackster working environment"
+        type: :string,
+        aliases: ['-e'],
+        desc: 'Rackster working environment'
       }
     ]
 
     no_tasks do
-      def configure path=Dir.pwd
+      def configure(path = Dir.pwd)
         Rackster.env = options[:environment] if options[:environment]
         Bundler.require(:default, Rackster.env.to_sym)
         Rackster.pwd = path
@@ -33,7 +32,7 @@ module Rackster
       configure
       say "Running migrations for #{Rackster.env} environment", :green
       Rackster::Db.migrator.run
-      say "Success", :green
+      say 'Success', :green
     end
 
     desc 'console', 'run current app console'
@@ -52,7 +51,7 @@ module Rackster
       configure
       if File.exist?(Rackster.pwd)
         tempdir = FileUtils.mkdir_p(File.join(Rackster.pwd, 'tmp'))
-        tmpl = File.join(Rackster.gem_root, 'lib/rackster/templates/config.ru.erb')
+        tmpl = Rackster.gem_path('rackster/templates/config.ru.erb')
         erb = ERB.new(File.read(tmpl)).result(binding)
         tempfile = Tempfile.new(['config', '.ru'], tempdir)
         tempfile.write(erb)

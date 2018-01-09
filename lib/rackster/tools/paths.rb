@@ -38,7 +38,7 @@ module Rackster
       end
 
       def load_paths
-        paths = [File.join(gem_root, 'lib/rackster/default_app'), root].compact
+        paths = [gem_path('rackster/default_app'), root].compact
         paths += (config['load_paths'] || []) if @configuration
         paths
       end
@@ -55,7 +55,7 @@ module Rackster
         end
       end
 
-      def find_path *subpaths
+      def find_path(*subpaths)
         find_paths(*subpaths).first
       end
 
@@ -65,12 +65,16 @@ module Rackster
         p.include?(f)
       end
 
-      def sha_paths *paths
-        paths.flatten.map{|i| Digest::SHA256.hexdigest(File.read(i)) }
+      def sha_paths(*paths)
+        paths.flatten.map { |i| Digest::SHA256.hexdigest(File.read(i)) }
       end
 
       def gem_root
         Gem::Specification.find_by_name('rackster').gem_dir
+      end
+
+      def gem_path(path = '')
+        File.join(gem_root, 'lib', path)
       end
     end
   end

@@ -1,3 +1,6 @@
+require 'sequel'
+require 'sequel/extensions/migration'
+
 module Rackster
   module Db # :nodoc:
     class << self
@@ -5,7 +8,6 @@ module Rackster
         @connection ||=
           begin
             connection = Sequel.connect(db_config)
-            connection.extension(:constraint_validations)
             connection
           end
       end
@@ -28,7 +30,7 @@ module Rackster
         path = Rackster.find_path('db/migrations')
         Sequel::TimestampMigrator.new(connection, path)
       rescue Sequel::DatabaseConnectionError
-        raise Errors::ManualSetupError, "configure db first"
+        raise Errors::ManualSetupError, 'configure db first'
       end
 
       private

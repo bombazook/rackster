@@ -3,7 +3,7 @@ module Rackster
   module Tools
     module Generators # :nodoc:
       class << self
-        def [] generator_name
+        def [](generator_name)
           sources = find_generator(generator_name)
           sha = Rackster.sha_paths(sources)
           cname = const_name(generator_name)
@@ -26,11 +26,13 @@ module Rackster
         end
 
         def find_generator(generator_name)
-          wildcard = File.join('app/generators/**', "#{generator_file(generator_name)}.rb")
+          generator_subdir = 'app/generators/**'
+          generator_file = "#{generator_file(generator_name)}.rb"
+          wildcard = File.join(generator_subdir, generator_file)
           Rackster.find_paths wildcard
         end
 
-        def load_from_scratch generator_name, sources=[]
+        def load_from_scratch(generator_name, sources = [])
           i = 0
           while i < sources.size
             load sources[i]
@@ -52,18 +54,18 @@ module Rackster
           Rackster::Generators.const_get const_name(generator_name)
         end
 
-        def const_name generator_name
+        def const_name(generator_name)
           Ext::String.camelize(generator_file(generator_name))
         end
       end
 
-      def load_generator generator_name
+      def load_generator(generator_name)
         Generators[generator_name]
       end
 
-      def invoke_generator generator_name, *arguments, **options, &block
+      def invoke_generator(generator_name, *arguments, **options)
         generator = load_generator(generator_name)
-        generator.new(arguments, {:inline => true}.merge!(options)).invoke_all
+        generator.new(arguments, { inline: true }.merge!(options)).invoke_all
       end
     end
   end
